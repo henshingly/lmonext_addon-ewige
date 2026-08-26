@@ -2,7 +2,7 @@
 /**
  * Project: LMOnext
  * Filename: addon/ewige/lmo-ewigetab.php
- * Fileversion: 1.0.2
+ * Fileversion: 1.2.0
  *
  * PHP version 8.2
  *
@@ -40,12 +40,20 @@
  */
 declare(strict_types=1);
 
-// Wird diese Datei direkt aufgerufen (URL/IFrame) oder per include() aus
-// einer anderen Datei eingebunden? Nur im direkten Fall wird ein
-// vollständiges HTML-Grundgerüst drumherum gebaut.
-$ewigeIsDirectCall = basename($_SERVER['SCRIPT_NAME'] ?? '') === 'lmo-ewigetab.php';
+// Wird diese Datei über den zentralen Controller addon-run.php aufgerufen
+// (der einzige noch erlaubte Aufrufweg, siehe addon/.htaccess) oder per
+// include() aus einer anderen Datei eingebunden? Nur im ersten Fall wird
+// ein vollständiges HTML-Grundgerüst drumherum gebaut.
+$ewigeIsDirectCall = defined('LMO_ADDON_STANDALONE_CALL');
 
 require_once __DIR__ . '/../../frontend/bootstrap.php';
+
+// Standalone-Addon: eigene Sprachdateien explizit laden. Name muss dem
+// manifest['name'] aus addon.json entsprechen ("ewige-tabelle"), nicht dem
+// Ordnernamen "ewige" - siehe AddonManager::discover().
+if (function_exists('addonManager')) {
+    \addonManager()->loadLanguages('ewige-tabelle');
+}
 
 // Dieses Addon ist bewusst zum Einbetten via iframe auf fremden Websites
 // gedacht (siehe Docblock oben) - die von frontend/bootstrap.php gesetzten
@@ -76,6 +84,11 @@ function ewigeProjectRootUrlPrefix() : string
         return $prefix;
     }
 
+    if (defined('LMO_ADDON_WEB_BASE')) {
+        $prefix = rtrim(dirname(rtrim(LMO_ADDON_WEB_BASE, '/'), 2), '/') . '/';
+        return $prefix;
+    }
+
     $projectRootDisk = rtrim(str_replace('\\', '/', dirname(__DIR__, 2)), '/');
     $scriptFilename  = str_replace('\\', '/', (string)($_SERVER['SCRIPT_FILENAME'] ?? ''));
     $scriptName      = (string)($_SERVER['SCRIPT_NAME'] ?? '');
@@ -89,7 +102,7 @@ function ewigeProjectRootUrlPrefix() : string
         }
     }
 
-    $isDirectCall = basename($_SERVER['SCRIPT_NAME'] ?? '') === basename(__FILE__);
+    $isDirectCall = defined('LMO_ADDON_STANDALONE_CALL');
     $prefix = $isDirectCall ? '../../' : '';
     return $prefix;
 }
@@ -107,7 +120,7 @@ if ($e_template === '') {
 
 if ($ewigeIsDirectCall) {
     header('Content-Type: text/html; charset=utf-8');
-    echo "<!DOCTYPE html>\n<html><head><meta charset=\"utf-8\"><title>Ewige Tabelle</title>"
+    echo "<!DOCTYPE html>\n<html><head><meta charset=\"utf-8\"><title>" . h(tf('ewige_titel')) . "</title>"
         . "<style>html,body{margin:0;padding:0;background:transparent;}</style></head><body>\n";
 }
 
@@ -151,7 +164,7 @@ function ewige_extract_block(string $src, string $name, ?string &$before, ?strin
 function renderEwigeTabelle(array $ligaIds, string $view, string $templateName): string
 {
     if (empty($ligaIds)) {
-        return '<p style="font-family:sans-serif;color:#a33">Fehlender oder ungültiger Parameter "ewige_ligas"</p>';
+        return '<p style="font-family:sans-serif;color:#a33">' . h(tf('ewige_param_fehlt')) . '</p>';
     }
 
     $service = new EternalTableService();
@@ -176,7 +189,7 @@ function renderEwigeTabelle(array $ligaIds, string $view, string $templateName):
     }
 
     if ($templatePath === '') {
-        return '<p style="font-family:sans-serif;color:#a33">Vorlage nicht gefunden.<br>'
+        return '<p style="font-family:sans-serif;color:#a33">' . h(tf('ewige_vorlage_nicht_gefunden')) . '<br>'
             . implode('<br>', array_map('h', $candidates))
             . '</p>';
     }
@@ -184,7 +197,7 @@ function renderEwigeTabelle(array $ligaIds, string $view, string $templateName):
     $templateSrc = (string)file_get_contents($templatePath);
 
     if ($templateSrc === '') {
-        return '<p style="font-family:sans-serif;color:#a33">Vorlage ist leer: '
+        return '<p style="font-family:sans-serif;color:#a33">' . h(tf('ewige_vorlage_leer')) . ' '
             . h($templatePath)
             . '</p>';
     }
@@ -242,7 +255,7 @@ function ewige_render_eternal(string $templateSrc, array $rows, array $ligaIds) 
 {
     $rowTemplate = ewige_extract_block($templateSrc, 'Inhalt', $before, $after);
     if ($rowTemplate === '') {
-        return '<p style="font-family:sans-serif;color:#a33">Ungültiges Template (kein Inhalt-Block gefunden)</p>';
+        return '<p style="font-family:sans-serif;color:#a33">' . h(tf('ewige_kein_inhalt_block')) . '</p>';
     }
 
     // Fußnoten-Nummern für Teams mit hinterlegtem(n) Strafgrund/Strafgründen
@@ -285,8 +298,8 @@ function ewige_render_eternal(string $templateSrc, array $rows, array $ligaIds) 
     }
 
     $outer = [
-        '<!--Tabelle-->'  => h('Ewige Tabelle'),
-        '<!--Fusszeile-->' => h(count($rows) . ' Teams · ' . count($ligaIds) . ' Liga(en)'),
+        '<!--Tabelle-->'  => h(tf('ewige_titel')),
+        '<!--Fusszeile-->' => h(tf('ewige_fusszeile', ['teams' => count($rows), 'ligen' => count($ligaIds)])),
         '<!--Fussnoten-->' => ewigeStrafFootnotes($rows, $footnoteNrs),
         '<!--Copyright-->' => \LMOnext\Liga\LigaService::renderCopyrightNotice('ewige'),
     ];
@@ -360,7 +373,7 @@ function ewige_render_matrix(string $templateSrc, array $m, array $ligaIds) : st
     // mit dem Spalten-Block (Spalte).
     $rowTemplate = ewige_extract_block($templateSrc, 'TeamZeile', $before, $after);
     if ($rowTemplate === '') {
-        return '<p style="font-family:sans-serif;color:#a33">Ungültiges Template (kein TeamZeile-Block gefunden)</p>';
+        return '<p style="font-family:sans-serif;color:#a33">' . h(tf('ewige_kein_teamzeile_block')) . '</p>';
     }
     $colTemplate = ewige_extract_block($before, 'Spalte', $colBefore, $colAfter);
 
@@ -400,8 +413,8 @@ function ewige_render_matrix(string $templateSrc, array $m, array $ligaIds) : st
     }
 
     $outer = [
-        '<!--Tabelle-->'  => h('Mehrjahres-Vergleich'),
-        '<!--Fusszeile-->' => 'Je Saison: <strong>Platzierung</strong> · Punkte. „–“ = Team in dieser Liga nicht dabei.',
+        '<!--Tabelle-->'  => h(tf('ewige_matrix_titel')),
+        '<!--Fusszeile-->' => tf('ewige_matrix_fusszeile'),
         '<!--Copyright-->' => \LMOnext\Liga\LigaService::renderCopyrightNotice('ewige'),
     ];
     $before = strtr($before, $outer);
