@@ -14,6 +14,11 @@ CHANGELOG.md des LMOnext-Kernprojekts unter den Abschnitten
   jetzt lokal im Addon statt zentral im Core), installierbar über
   Administrator → Addons.
 
+## Version 1.3.1 (KRITISCHER Bugfix)
+
+- KRITISCHER Bugfix (gemeldet: Tabelle zeigte kaputtes HTML wie '(ewige_ehemals)">KFC Uerdingen 05' statt einer normalen Zeile): das Standard-Template verwendet den Platzhalter <!--TeamLang--> ZWEIMAL - einmal im title-Attribut (Tooltip), einmal als sichtbarer Text. Der neue HTML-Zusatz für ehemalige Namen (u.a. ein <span>-Tag mit Anführungszeichen im class-Attribut) landete dadurch auch IM title-Attribut und brach es vorzeitig ab, wodurch der Browser den Rest als rohen, kaputten Text anzeigte. Fix: standard.tpl.php 1.2.1 nutzt jetzt einen eigenen Platzhalter <!--TeamLangTitel--> für den Attribut-Kontext (reiner Text, ohne jedes HTML), lmo-ewigetab.php 1.3.1 befüllt ihn entsprechend separat.
+- Hinweis: falls weiterhin der rohe Schlüssel "(ewige_ehemals)" statt eines übersetzten Textes erscheint, prüfe bitte, ob das komplette Addon-Paket (inkl. lang/de.php) neu hochgeladen wurde - der Schlüssel wurde erst mit Version 1.3.0 neu eingeführt.
+
 ## Version 1.3.0 (Neues Feature)
 
 - Neues Feature (auf Wunsch): berücksichtigt jetzt bereits im Admin-Bereich hinterlegte Team-Verknüpfungen (Umbenennung/Fusion/Abspaltung, siehe Administrator → Teams (global) → Verknüpfungen). Verknüpfte Teams (z.B. "Bayer 05 Uerdingen" und "KFC Uerdingen 05") werden in der Ewigen Tabelle als EINE Zeile unter der kanonischen (aktuellen) Team-ID zusammengefasst statt getrennt gezählt. Der Teamname zeigt zusätzlich in Klammern die ehemaligen Namen an, unter denen dieselbe Mannschaft in den ausgewählten Ligen sonst noch spielte, z.B. "Bayer 05 Uerdingen (ehem. KFC Uerdingen 05)".

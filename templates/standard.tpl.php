@@ -1,5 +1,5 @@
 <!--
-  Template: addon/ewige | Filename: standard.tpl.php | Fileversion: 1.2.0
+  Template: addon/ewige | Filename: standard.tpl.php | Fileversion: 1.2.1
   Ewige Tabelle (aufsummierte Stände über mehrere Ligen), gleiche Optik wie
   addon/mini/templates/standard.tpl.php (LMOnext-Look: #153A8C, Rahmen #e3e7ee).
 -->
@@ -53,7 +53,7 @@
   <tr class="<!--Class-->" style="<!--Style-->">
     <td class="lmo-platz"><!--Platz--></td>
     <td class="lmo-logo"><!--Logo--></td>
-    <td class="lmo-team" title="<!--TeamLang-->"><!--TeamLang--><!--StrafHinweis--></td>
+    <td class="lmo-team" title="<!--TeamLangTitel-->"><!--TeamLang--><!--StrafHinweis--></td>
     <td class="lmo-r"><!--Saisons--></td>
     <td class="lmo-r"><!--Spiele--></td>
     <td class="lmo-r"><!--Siege--></td>

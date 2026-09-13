@@ -2,7 +2,7 @@
 /**
  * Project: LMOnext
  * Filename: addon/ewige/lmo-ewigetab.php
- * Fileversion: 1.3.0
+ * Fileversion: 1.3.1
  *
  * PHP version 8.2
  *
@@ -292,6 +292,17 @@ function ewige_render_eternal(string $templateSrc, array $rows, array $ligaIds) 
             '<!--Logo-->'          => ewigeLogoImg((int)$r['id']),
             '<!--Team-->'          => h($r['kurz'] !== '' ? $r['kurz'] : $r['name']) . $ewigeFormerSuffix,
             '<!--TeamLang-->'      => h($r['name']) . $ewigeFormerSuffix,
+            // BUGFIX (gemeldet: Tabelle zeigte kaputtes HTML wie
+            // '(ewige_ehemals)">Name' statt der Zeile): <!--TeamLang-->
+            // wird im Standard-Template ZWEIMAL verwendet - einmal im
+            // title-Attribut (Tooltip), einmal als sichtbarer Text. Der
+            // HTML-Zusatz ($ewigeFormerSuffix, u.a. ein <span>-Tag mit
+            // Anführungszeichen im class-Attribut) landete dadurch auch
+            // IM title-Attribut und brach es vorzeitig ab, was den
+            // Browser den Rest als rohen, kaputten Text anzeigen ließ.
+            // Eigener Platzhalter für den Attribut-Kontext: reiner Text,
+            // ohne jedes HTML.
+            '<!--TeamLangTitel-->' => h($r['name']),
             '<!--StrafHinweis-->'  => ewigeStrafHinweis($r, $footnoteNrs[(int)$r['id']] ?? 0),
             '<!--Saisons-->'       => (string)$r['saisons'],
             '<!--Spiele-->'        => (string)$r['sp'],
