@@ -1,5 +1,5 @@
 <!--
-  Template: addon/ewige | Filename: standard.tpl.php | Fileversion: 1.1.0
+  Template: addon/ewige | Filename: standard.tpl.php | Fileversion: 1.2.0
   Ewige Tabelle (aufsummierte Stände über mehrere Ligen), gleiche Optik wie
   addon/mini/templates/standard.tpl.php (LMOnext-Look: #153A8C, Rahmen #e3e7ee).
 -->
@@ -15,6 +15,7 @@
 .lmo-eternal td.lmo-logo{width:1%;text-align:center;padding-left:2px;padding-right:2px}
 .lmo-eternal td.lmo-logo img{height:18px;width:auto;vertical-align:middle}
 .lmo-eternal td.lmo-team{text-align:left;font-weight:600}
+.lmo-eternal .ewige-ehemals{font-weight:400;color:#9098a8;font-size:.85em;white-space:normal}
 .lmo-eternal td.lmo-r{text-align:right;font-variant-numeric:tabular-nums}
 .lmo-eternal td.lmo-pkt{text-align:right;font-weight:700;color:#153A8C;font-variant-numeric:tabular-nums}
 .lmo-eternal tbody tr:hover{background:#f9fbff}

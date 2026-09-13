@@ -17,4 +17,5 @@ return [
     'ewige_kein_teamzeile_block'   => 'Ungültiges Template (kein TeamZeile-Block gefunden)',
     'ewige_matrix_titel'           => 'Mehrjahres-Vergleich',
     'ewige_matrix_fusszeile'       => 'Je Saison: <strong>Platzierung</strong> · Punkte. „–“ = Team in dieser Liga nicht dabei.',
+    'ewige_ehemals'                => 'ehem. {names}',
 ];

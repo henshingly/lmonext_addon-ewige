@@ -17,4 +17,5 @@ return [
     'ewige_kein_teamzeile_block'   => 'Invalid template (no "TeamZeile" block found)',
     'ewige_matrix_titel'           => 'Multi-year comparison',
     'ewige_matrix_fusszeile'       => 'Per season: <strong>Ranking</strong> · Points. "–" = team not in this league.',
+    'ewige_ehemals'                => 'formerly {names}',
 ];

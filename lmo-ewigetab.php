@@ -2,7 +2,7 @@
 /**
  * Project: LMOnext
  * Filename: addon/ewige/lmo-ewigetab.php
- * Fileversion: 1.2.0
+ * Fileversion: 1.3.0
  *
  * PHP version 8.2
  *
@@ -273,11 +273,25 @@ function ewige_render_eternal(string $templateSrc, array $rows, array $ligaIds) 
     $rowsHtml = '';
     foreach ($rows as $r) {
         $diff = (int)$r['tore_h'] - (int)$r['tore_g'];
+        // Team-Verknüpfungen (Umbenennung/Fusion/Abspaltung, siehe
+        // EternalTableService::resolveTeamLinkGroups() im Core): das
+        // Kurz-/Langname-Feld liefert bewusst nur den aktuellen Namen,
+        // ohne Zusatz - former_names enthält die Namen, unter denen
+        // dieselbe (verknüpfte) Mannschaft in den ausgewählten Ligen
+        // sonst noch spielte. Die "(ehem. ...)"-Darstellung baut dieses
+        // Addon selbst, damit sie mit dem eigenen Sprachschlüssel
+        // (ewige_ehemals) übersetzbar bleibt.
+        $ewigeFormerSuffix = '';
+        if (!empty($r['former_names'])) {
+            $ewigeFormerSuffix = ' <span class="ewige-ehemals">('
+                . h(tf('ewige_ehemals', ['names' => implode(', ', $r['former_names'])]))
+                . ')</span>';
+        }
         $rowsHtml .= strtr($rowTemplate, [
             '<!--Platz-->'         => (string)$r['rang'],
             '<!--Logo-->'          => ewigeLogoImg((int)$r['id']),
-            '<!--Team-->'          => h($r['kurz'] !== '' ? $r['kurz'] : $r['name']),
-            '<!--TeamLang-->'      => h($r['name']),
+            '<!--Team-->'          => h($r['kurz'] !== '' ? $r['kurz'] : $r['name']) . $ewigeFormerSuffix,
+            '<!--TeamLang-->'      => h($r['name']) . $ewigeFormerSuffix,
             '<!--StrafHinweis-->'  => ewigeStrafHinweis($r, $footnoteNrs[(int)$r['id']] ?? 0),
             '<!--Saisons-->'       => (string)$r['saisons'],
             '<!--Spiele-->'        => (string)$r['sp'],
