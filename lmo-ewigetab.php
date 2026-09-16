@@ -2,7 +2,7 @@
 /**
  * Project: LMOnext
  * Filename: addon/ewige/lmo-ewigetab.php
- * Fileversion: 1.3.1
+ * Fileversion: 1.3.2
  *
  * PHP version 8.2
  *
@@ -22,9 +22,11 @@
  *   $wertung        = 'pkt2';    // optional, Standard 'pkt' (historische Punkte)
  *   include('/PfadZuLMOnext/addon/ewige/lmo-ewigetab.php');
  *
- * Variante 2 – per IFrame/direkter URL:
+ * Variante 2 – per IFrame (über den zentralen Standalone-Controller, siehe
+ * addon-run.php im Projekt-Root - direkte Aufrufe der .php-Datei sind aus
+ * Sicherheitsgründen per addon/.htaccess gesperrt):
  *
- *   <iframe src="https://.../addon/ewige/lmo-ewigetab.php?ewige_ligas=3,5,7&ewige_view=eternal"
+ *   <iframe src="https://.../addon-run.php?addon=ewige-tabelle&file=lmo-ewigetab.php&ewige_ligas=3,5,7&ewige_view=eternal"
  *           frameborder="0" width="860" height="600" scrolling="auto"></iframe>
  *
  * Steuerparameter (GET hat immer Vorrang vor vorher gesetzten PHP-Variablen):

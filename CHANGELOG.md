@@ -14,6 +14,18 @@ CHANGELOG.md des LMOnext-Kernprojekts unter den Abschnitten
   jetzt lokal im Addon statt zentral im Core), installierbar über
   Administrator → Addons.
 
+## Version 1.3.2 (Dokumentations-Bugfix)
+
+- Bugfix (im Zuge einer systematischen Pruefung aller Standalone-Addon-
+  Einstiegspunkte gefunden, ausgeloest durch einen aehnlichen Fund beim
+  neuen ticker-Addon): der iframe-Einbindungshinweis im Datei-Kopf zeigte
+  einen direkten Pfad (addon/ewige/lmo-ewigetab.php?...), der durch
+  addon/.htaccess gesperrt ist und so nie funktioniert haette. Korrigiert
+  auf den tatsaechlich funktionierenden Weg ueber
+  addon-run.php?addon=ewige-tabelle&file=lmo-ewigetab.php&... - die
+  Standalone-Erkennung selbst (LMO_ADDON_STANDALONE_CALL) war bereits
+  korrekt, nur die Dokumentation war falsch.
+
 ## Version 1.3.1 (KRITISCHER Bugfix)
 
 - KRITISCHER Bugfix (gemeldet: Tabelle zeigte kaputtes HTML wie '(ewige_ehemals)">KFC Uerdingen 05' statt einer normalen Zeile): das Standard-Template verwendet den Platzhalter <!--TeamLang--> ZWEIMAL - einmal im title-Attribut (Tooltip), einmal als sichtbarer Text. Der neue HTML-Zusatz für ehemalige Namen (u.a. ein <span>-Tag mit Anführungszeichen im class-Attribut) landete dadurch auch IM title-Attribut und brach es vorzeitig ab, wodurch der Browser den Rest als rohen, kaputten Text anzeigte. Fix: standard.tpl.php 1.2.1 nutzt jetzt einen eigenen Platzhalter <!--TeamLangTitel--> für den Attribut-Kontext (reiner Text, ohne jedes HTML), lmo-ewigetab.php 1.3.1 befüllt ihn entsprechend separat.
