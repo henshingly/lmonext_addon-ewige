@@ -8,23 +8,20 @@ Die vollständige Entwicklungshistorie bis zur Extraktion steht im
 CHANGELOG.md des LMOnext-Kernprojekts unter den Abschnitten
 `addon/ewige/*`.
 
+## 1.3.2
+
+- Spaltenüberschrift "Tore" übernimmt jetzt die Einstellung "Alternative
+  für Tore" (z.B. "Holz") der ersten ausgewählten Liga; Platzhalter
+  <!--ToreLabel--> in templates/standard.tpl.php (lmo-ewigetab.php 1.3.2,
+  standard.tpl.php 1.2.2). Eigene Templates mit festem "Tore" bleiben
+  unverändert, bis dort der Platzhalter eingesetzt wird.
+- Freilos-Teams werden ausgeblendet (Kennzeichen im Core, ab LMOnext 1.11.7).
+
 ## Aktuelle Version: 1.0.2
 
 - Als eigenständiges addon.json-Paket verpackt (Templates/Sprachdateien
   jetzt lokal im Addon statt zentral im Core), installierbar über
   Administrator → Addons.
-
-## Version 1.3.2 (Dokumentations-Bugfix)
-
-- Bugfix (im Zuge einer systematischen Pruefung aller Standalone-Addon-
-  Einstiegspunkte gefunden, ausgeloest durch einen aehnlichen Fund beim
-  neuen ticker-Addon): der iframe-Einbindungshinweis im Datei-Kopf zeigte
-  einen direkten Pfad (addon/ewige/lmo-ewigetab.php?...), der durch
-  addon/.htaccess gesperrt ist und so nie funktioniert haette. Korrigiert
-  auf den tatsaechlich funktionierenden Weg ueber
-  addon-run.php?addon=ewige-tabelle&file=lmo-ewigetab.php&... - die
-  Standalone-Erkennung selbst (LMO_ADDON_STANDALONE_CALL) war bereits
-  korrekt, nur die Dokumentation war falsch.
 
 ## Version 1.3.1 (KRITISCHER Bugfix)
 

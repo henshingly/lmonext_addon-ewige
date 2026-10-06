@@ -1,5 +1,5 @@
 <!--
-  Template: addon/ewige | Filename: standard.tpl.php | Fileversion: 1.2.1
+  Template: addon/ewige | Filename: standard.tpl.php | Fileversion: 1.2.2
   Ewige Tabelle (aufsummierte Stände über mehrere Ligen), gleiche Optik wie
   addon/mini/templates/standard.tpl.php (LMOnext-Look: #153A8C, Rahmen #e3e7ee).
 -->
@@ -41,7 +41,7 @@
       <th class="lmo-r">S</th>
       <th class="lmo-r">U</th>
       <th class="lmo-r">N</th>
-      <th class="lmo-r">Tore</th>
+      <th class="lmo-r"><!--ToreLabel--></th>
       <th class="lmo-r">Diff</th>
       <th class="lmo-r" title="Punkte nach dem in der jeweiligen Saison tatsächlich gültigen Punktesystem">Pkt (hist.)</th>
       <th class="lmo-r" title="Punkte, als hätte immer das 2-Punkte-System gegolten (Sieg=2, Unentschieden=1)">Pkt (2er)</th>

@@ -22,9 +22,7 @@
  *   $wertung        = 'pkt2';    // optional, Standard 'pkt' (historische Punkte)
  *   include('/PfadZuLMOnext/addon/ewige/lmo-ewigetab.php');
  *
- * Variante 2 – per IFrame (über den zentralen Standalone-Controller, siehe
- * addon-run.php im Projekt-Root - direkte Aufrufe der .php-Datei sind aus
- * Sicherheitsgründen per addon/.htaccess gesperrt):
+ * Variante 2 – per IFrame/direkter URL:
  *
  *   <iframe src="https://.../addon-run.php?addon=ewige-tabelle&file=lmo-ewigetab.php&ewige_ligas=3,5,7&ewige_view=eternal"
  *           frameborder="0" width="860" height="600" scrolling="auto"></iframe>
@@ -324,7 +322,24 @@ function ewige_render_eternal(string $templateSrc, array $rows, array $ligaIds) 
         ]);
     }
 
+    // Spaltenüberschrift der Tore-Spalte: "Alternative für Tore" (nameTor,
+    // z.B. "Holz" bei Kegeln) der ersten ausgewählten Liga, die einen Wert hat.
+    $toreLabel = 'Tore';
+    foreach ($ligaIds as $lid) {
+        try {
+            $o = getLigaOptions((int)$lid);
+        } catch (\Throwable) {
+            $o = [];
+        }
+        $n = trim((string)($o['nameTor'] ?? ''));
+        if ($n !== '') {
+            $toreLabel = $n;
+            break;
+        }
+    }
+
     $outer = [
+        '<!--ToreLabel-->' => h($toreLabel),
         '<!--Tabelle-->'  => h(tf('ewige_titel')),
         '<!--Fusszeile-->' => h(tf('ewige_fusszeile', ['teams' => count($rows), 'ligen' => count($ligaIds)])),
         '<!--Fussnoten-->' => ewigeStrafFootnotes($rows, $footnoteNrs),
